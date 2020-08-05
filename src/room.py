@@ -21,3 +21,12 @@ class Room:
         print("\nThis place contains:")
         for item in self.items:
             print(f"{item.name}\t {item.description}")
+        if not len(self.items):
+            print("Nothing")
+    
+    def remove_item(self, item_name):
+        for index in range(len(self.items)):
+            if self.items[index].name == item_name:
+                return self.items.pop(index)
+        print(f"There's no {item_name} in this room.")
+        return None

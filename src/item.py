@@ -12,21 +12,21 @@ class Item:
 
 class Gem(Item):
     def __init__(self):
-        super().__init__("Gem", "Purple and shiny.")
+        super().__init__("gem", "Purple and shiny.")
 
 class Sword(Item):
     def __init__(self):
-        super().__init__("Sword", "Nice and sharp.")
+        super().__init__("sword", "Nice and sharp.")
 
 class Stone(Item):
     def __init__(self):
-        super().__init__("Stone", "Just a stone.")
+        super().__init__("stone", "Just a stone.")
 
 class Knife(Item):
     def __init__(self):
-        super().__init__("Knife", "May come in handy.")
+        super().__init__("knife", "May come in handy.")
 
 class Coin(Item):
     def __init__(self):
-        super().__init__("Coin", "Every penny counts.")
+        super().__init__("coin", "Every penny counts.")
 

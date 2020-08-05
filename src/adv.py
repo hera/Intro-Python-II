@@ -55,6 +55,7 @@ random.shuffle(items)
 
 
 # Put items in rooms
+
 for r in room:
     for i in items:
         if not len(items):
@@ -62,38 +63,21 @@ for r in room:
         room[r].add_item(items.pop())
 
 
-#
-# Main
-#
-
-# Make a new player object that is currently in the 'outside' room.
-
-# Write a loop that:
-#
-# * Prints the current room name
-# * Prints the current description (the textwrap module might be useful here).
-# * Waits for user input and decides what to do.
-#
-# If the user enters a cardinal direction, attempt to move to the room there.
-# Print an error message if the movement isn't allowed.
-#
-# If the user enters "q", quit the game.
-
 def print_help():
     print(
-        """
-        Commands:
+"""
+Commands:
 
-        n - go north
-        e - go east
-        s - go south
-        w - go west
+n - go north
+e - go east
+s - go south
+w - go west
 
-        whereami - display current location
+whereami - display current location
 
-        h, help  - display this message
-        q, quit  - quit
-        """
+h, help  - display this message
+q, quit  - quit
+"""
     )
 
 
@@ -136,10 +120,10 @@ if len(sys.argv) == 2 and sys.argv[1] in ("-h", "--help"):
     quit()
 
 print(
-    """
-    Welcome to Digital Adventure
-    ______________________________________________
-    """
+"""
+Welcome to Digital Adventure
+______________________________________________
+"""
 )
 
 # Ask name
@@ -153,7 +137,7 @@ while True:
         entered_name = "Anonymous Adventurer"
     
     user = Player(entered_name, room["outside"])
-    print(f"Welcome, {user.name}!\n")
+    print(f"\nWelcome, {user.name}!\n")
     print(user.current_room)
     user.current_room.show_items()
 
@@ -179,5 +163,17 @@ while True:
         go("s")
     elif command[0] == "w":
         go("w")
+    elif command[0] in ("take", "get") and command[1]:
+        taken_item = user.current_room.remove_item(command[1])
+        if taken_item:
+            user.add_item(taken_item)
+            user.show_items()
+    elif command[0] == "drop" and command[1]:
+        taken_item = user.remove_item(command[1])
+        if taken_item:
+            user.current_room.add_item(taken_item)
+            user.show_items()
+    elif command[0] in ("inventory", "bag", "i"):
+        user.show_items()
     else:
         print("Incorrect command.")
