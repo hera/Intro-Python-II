@@ -1,6 +1,8 @@
 import sys
+import random
 from room import Room
 from player import Player
+import item
 
 # Declare all the rooms
 
@@ -34,6 +36,31 @@ room["overlook"].s_to = room["foyer"]
 room["narrow"].w_to = room["foyer"]
 room["narrow"].n_to = room["treasure"]
 room["treasure"].s_to = room["narrow"]
+
+
+item_classes = [item.Coin, item.Gem, item.Knife, item.Stone, item.Sword]
+items = []
+
+
+# Generate random quantity of items
+
+for c in item_classes:
+    for i in range(random.randint(0, 3)):
+        items.append(c())
+
+
+# Randomize items
+
+random.shuffle(items)
+
+
+# Put items in rooms
+for r in room:
+    for i in items:
+        if not len(items):
+            break
+        room[r].add_item(items.pop())
+
 
 #
 # Main
@@ -77,24 +104,28 @@ def go(direction):
         else:
             user.current_room = user.current_room.n_to
             print(user.current_room)
+            user.current_room.show_items()
     elif direction == "e":
         if not user.current_room.e_to:
             print("Can't go east.")
         else:
             user.current_room = user.current_room.e_to
             print(user.current_room)
+            user.current_room.show_items()
     elif direction == "s":
         if not user.current_room.s_to:
             print("Can't go south.")
         else:
             user.current_room = user.current_room.s_to
             print(user.current_room)
+            user.current_room.show_items()
     elif direction == "w":
         if not user.current_room.w_to:
             print("Can't go west.")
         else:
             user.current_room = user.current_room.w_to
             print(user.current_room)
+            user.current_room.show_items()
     else:
         print("Unknown direction.")
 
@@ -102,6 +133,7 @@ def go(direction):
 
 if len(sys.argv) == 2 and sys.argv[1] in ("-h", "--help"):
     print_help()
+    quit()
 
 print(
     """
@@ -117,29 +149,35 @@ while True:
     
     if entered_name in ("q", "quit"):
         quit()
-    else:
-        user = Player(entered_name, room["foyer"])
-        print(f"Welcome, {user.name}!")
-        print(user.current_room)
+    elif entered_name == "":
+        entered_name = "Anonymous Adventurer"
+    
+    user = Player(entered_name, room["outside"])
+    print(f"Welcome, {user.name}!\n")
+    print(user.current_room)
+    user.current_room.show_items()
+
+    if user.name:
         break
 
 
 while True:
-    command = input(">>> ")
+    command = input(">>> ").split(" ")
     
-    if command in ("q", "quit"):
+    if command[0] in ("q", "quit"):
         quit()
-    elif command in ("h", "help"):
+    elif command[0] in ("h", "help"):
         print_help()
-    elif command == "whereami":
+    elif command[0] == "whereami":
         print(user.current_room)
-    elif command == "n":
+        user.current_room.show_items()
+    elif command[0] == "n":
         go("n")
-    elif command == "e":
+    elif command[0] == "e":
         go("e")
-    elif command == "s":
+    elif command[0] == "s":
         go("s")
-    elif command == "w":
+    elif command[0] == "w":
         go("w")
     else:
         print("Incorrect command.")
